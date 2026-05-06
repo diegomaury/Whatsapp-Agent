@@ -15,7 +15,5 @@ export async function sendWhatsAppMessage(to: string, body: string) {
       }),
     }
   );
-  const json = await res.json();
-  if (!res.ok) console.error("[WhatsApp send error]", JSON.stringify(json));
-  return json;
+  return res.json();
 }
