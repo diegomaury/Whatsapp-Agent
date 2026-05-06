@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(curl -s \"https://legacy-wildlife-obscure.ngrok-free.dev/api/webhook?hub.mode=subscribe&hub.verify_token=test&hub.challenge=CHALLENGE_ACCEPTED\")",
+      "Bash(curl -s \"https://legacy-wildlife-obscure.ngrok-free.dev/api/webhook?hub.mode=subscribe&hub.verify_token=2090311945&hub.challenge=CHALLENGE_ACCEPTED\")",
+      "Bash(findstr \"WHATSAPP_VERIFY_TOKEN\" \"C:\\\\Users\\\\DiegoLocal\\\\Documents\\\\Claude\\\\Projects\\\\whatsapp-platform\\\\n9n\\\\Whatsapp-Agent\\\\.env.local\")"
     ]
   }
 }
