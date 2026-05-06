@@ -15,5 +15,13 @@ export async function sendWhatsAppMessage(to: string, body: string) {
       }),
     }
   );
-  return res.json();
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const message = data?.error?.message || "Failed to send WhatsApp message";
+    throw new Error(message);
+  }
+
+  return data;
 }
