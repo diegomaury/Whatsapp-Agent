@@ -8,6 +8,20 @@ export async function GET() {
     .order("updated_at", { ascending: false });
 
   if (error) {
+    const tableMissing =
+      error.code === "PGRST205" ||
+      error.message.includes("Could not find the table 'public.conversations'");
+    if (tableMissing) {
+      return Response.json(
+        {
+          error:
+            "Missing Supabase schema. Run supabase-schema.sql in Supabase SQL Editor for this project.",
+          details: error.message,
+        },
+        { status: 500 }
+      );
+    }
+
     return Response.json({ error: error.message }, { status: 500 });
   }
 
