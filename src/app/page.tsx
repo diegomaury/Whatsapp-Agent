@@ -12,9 +12,14 @@ export default function Dashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const selected = conversations.find((c) => c.id === selectedId);
+
+  const chatHeaderBackground = "#141414";
+  const messagesBackground = "radial-gradient(circle at 20% 80%, rgba(16,185,129,0.03) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(16,185,129,0.02) 0%, transparent 50%)";
+  const inputBarBackground = "#141414";
 
   const fetchConversations = useCallback(async () => {
     const res = await fetch("/api/conversations");
@@ -85,15 +90,31 @@ export default function Dashboard() {
 
   async function handleSend() {
     if (!input.trim() || !selectedId || sending) return;
+
+    const message = input.trim();
     setSending(true);
-    await fetch(`/api/conversations/${selectedId}/send`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input.trim() }),
-    });
-    setInput("");
-    setSending(false);
-    fetchMessages(selectedId);
+
+    try {
+      setSendError(null);
+
+      const response = await fetch(`/api/conversations/${selectedId}/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        setSendError(data?.error || "Failed to send WhatsApp message");
+        return;
+      }
+
+      setInput("");
+      fetchMessages(selectedId);
+    } finally {
+      setSending(false);
+    }
   }
 
   function formatTime(dateStr: string) {
@@ -236,6 +257,11 @@ export default function Dashboard() {
                 backgroundImage: "radial-gradient(circle at 20% 80%, rgba(16,185,129,0.03) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(16,185,129,0.02) 0%, transparent 50%)",
               }}
             >
+              {sendError && (
+                <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+                  {sendError}
+                </div>
+              )}
               {messages.map((msg, i) => {
                 const isUser = msg.role === "user";
                 const showTime = i === messages.length - 1 || messages[i + 1]?.role !== msg.role;
@@ -268,7 +294,7 @@ export default function Dashboard() {
             </div>
 
             {/* Input Bar */}
-            <div className="px-6 py-4 border-t border-white/[0.06]" style={{ background: "#141414" }}>
+            <div className="px-6 py-4 border-t border-white/6" style={{ background: "#141414" }}>
               <div className="flex items-center gap-3 bg-white/[0.06] rounded-xl px-4 py-2.5 border border-white/[0.06] focus-within:border-emerald-500/40 transition-colors">
                 <input
                   type="text"
@@ -281,7 +307,7 @@ export default function Dashboard() {
                 <button
                   onClick={handleSend}
                   disabled={sending || !input.trim()}
-                  className="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center flex-shrink-0"
+                  className="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center shrink-0"
                   aria-label="Send"
                 >
                   {sending ? (
