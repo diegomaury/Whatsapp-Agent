@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useEffect, useState, useRef, useCallback } from "react";
 import type { ConversationWithLastMessage, Message } from "@/lib/types";
+import { getBrowserSupabase } from "@/lib/supabase-browser";
 
 export default function Dashboard() {
   const supabase = useMemo(() => {
@@ -11,6 +11,7 @@ export default function Dashboard() {
     if (!url || !key) return null;
     return createClient(url, key);
   }, []);
+  const supabase = getBrowserSupabase();
 
   const [conversations, setConversations] = useState<ConversationWithLastMessage[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
