@@ -254,3 +254,4 @@ If using the Meta test phone number:
 | Dashboard shows no conversations | Make sure you're opening the correct port (check terminal output) |
 | Duplicate replies | Meta retries if your webhook doesn't respond within 5 seconds — check server logs for slow AI responses |
 | "Message failed to send" | Verify your `WHATSAPP_ACCESS_TOKEN` hasn't expired and `WHATSAPP_PHONE_NUMBER_ID` is correct |
+# whatsapp-agent-fh
