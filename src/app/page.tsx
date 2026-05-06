@@ -5,12 +5,6 @@ import type { ConversationWithLastMessage, Message } from "@/lib/types";
 import { getBrowserSupabase } from "@/lib/supabase-browser";
 
 export default function Dashboard() {
-  const supabase = useMemo(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return null;
-    return createClient(url, key);
-  }, []);
   const supabase = getBrowserSupabase();
 
   const [conversations, setConversations] = useState<ConversationWithLastMessage[]>([]);
