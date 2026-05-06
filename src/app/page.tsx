@@ -108,7 +108,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-[#0f0f0f] font-sans">
       {/* Sidebar */}
-      <div className="w-[320px] flex flex-col border-r border-white/[0.06]" style={{ background: "#141414" }}>
+      <div className="w-[320px] flex flex-col border-r border-white/6 bg-[#141414]">
         {/* Sidebar Header */}
         <div className="px-5 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-3">
